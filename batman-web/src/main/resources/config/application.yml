@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: batman
+
+  # 使Java8的Time API字段转换正常
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+server:
+  port: 8888
+
+# 自定义设置
+system:
+  sign:
+    secret-key: 84ad33146a0943a8b56b806dd8145244
+    limit-seconds: 180
+  # 注意此处填写绝对路径
+  path: C:\mo9Project\text.xlsx
+  fileNum: 1
+  stock: 600170,600000,600620,603025,603658,601872,	600756,600676,600386,600798
+
+
