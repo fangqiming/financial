@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Author:qmfang
- * @Description: 用于解析Html文件
+ * @Description: 用于解析Html文件获取经过整理后的财务财务指标数据
  * @Date:Created in 10:15 2018/3/26
  * @Modified By:
  */

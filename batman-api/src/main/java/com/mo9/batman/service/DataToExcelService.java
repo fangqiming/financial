@@ -50,5 +50,14 @@ public interface DataToExcelService {
      * @param titles
      * @param path
      */
+    @Deprecated
     void writeTitle(Map<String, List<String>> titles, String path);
+
+    /**
+     * 将标题写入到行位
+     *
+     * @param xssfWorkbook
+     * @param titles
+     */
+    void writeTitleTail(Workbook xssfWorkbook, Map<String, List<String>> titles);
 }

@@ -27,6 +27,8 @@ import java.util.*;
 public class ExcelServiceImpl implements ExcelService {
 
     /**
+     * 注意 由于设计时没有考虑扩展性，导致此Map公用了，因为没获取不同的数据时，都需要重启
+     * 以保证Map中数据的有效性
      * Map<Sheet的名称, List<title值>>
      */
     private Map<String, List<String>> sheetMap = new HashMap<>();
@@ -39,13 +41,8 @@ public class ExcelServiceImpl implements ExcelService {
             }
             try {
                 File file = new File(path);
-                String basePath = file.getParent();
-                File baseFile = new File(basePath);
-                if (!baseFile.exists()) {
-                    baseFile.mkdirs();
-                }
                 if (!file.exists()) {
-                    file.createNewFile();
+                    throw new RuntimeException("please create " + path + " file");
                 }
                 return new XSSFWorkbook(new FileInputStream(path));
             } catch (IOException e) {
@@ -161,6 +158,7 @@ public class ExcelServiceImpl implements ExcelService {
         }
     }
 
+    @Override
     public Map<String, List<String>> getTitleCache() {
         return this.sheetMap;
     }

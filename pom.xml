@@ -56,6 +56,9 @@
         <jsonrpc4j.version>1.5.2</jsonrpc4j.version>
         <okhttp.version>3.9.1</okhttp.version>
         <jsoup.jsoup>1.11.2</jsoup.jsoup>
+        <openfeign.version>9.5.1</openfeign.version>
+        <retrofit2.version>2.3.0</retrofit2.version>
+        <retrofit2.log.version>3.8.1</retrofit2.log.version>
     </properties>
 
     <dependencyManagement>
@@ -147,6 +150,39 @@
                 <artifactId>jackson-datatype-jsr310</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
+
+            <!-- retrofit2 -->
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>retrofit</artifactId>
+                <version>${retrofit2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>converter-jackson</artifactId>
+                <version>${retrofit2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>converter-gson</artifactId>
+                <version>${retrofit2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>adapter-rxjava</artifactId>
+                <version>${retrofit2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>converter-scalars</artifactId>
+                <version>${retrofit2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>logging-interceptor</artifactId>
+                <version>${retrofit2.log.version}</version>
+            </dependency>
+            <!-- retrofit2  -->
 
         </dependencies>
     </dependencyManagement>

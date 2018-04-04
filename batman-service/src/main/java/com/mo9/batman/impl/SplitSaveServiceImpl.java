@@ -6,6 +6,7 @@ import com.mo9.batman.entity.change.FinancialChangeIndexBO;
 import com.mo9.batman.service.ExcelService;
 import com.mo9.batman.service.HtmlParseService;
 import com.mo9.batman.service.SplitSaveService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,6 +27,7 @@ import java.util.Map;
  * @Date:Created in 15:58 2018/3/27
  * @Modified By:
  */
+@Slf4j
 @Component
 public class SplitSaveServiceImpl implements SplitSaveService {
 
@@ -44,8 +46,10 @@ public class SplitSaveServiceImpl implements SplitSaveService {
             SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook(excelService.create(path), 500);
             for (String code : stockCode) {
                 try {
+                    System.out.println(code);
                     sleep(2 * 1000);
                     Document doc = Jsoup.connect("http://basic.10jqka.com.cn/" + code + "/finance.html#stockpage").get();
+                    System.out.println(doc);
                     List<MetaData> assets = htmlParseService.getAssetLiabilities(doc);
                     List<FinancialChangeIndexBO> change = htmlParseService.getFinancialChange(doc);
                     FinancialIndexBO financialIndex = htmlParseService.getFinancialIndex(doc);
@@ -57,9 +61,14 @@ public class SplitSaveServiceImpl implements SplitSaveService {
                     System.out.println("access failed :" + "http://basic.10jqka.com.cn/" + code + "/finance.html#stockpage");
                 }
             }
+            //title写到末尾
+            dataToExcelService.writeTitleTail(xssfWorkbook, excelService.getTitleCache());
+            //所有数据写入到excel文件中
             excelService.write2file(path, xssfWorkbook);
+            System.out.println(excelService.getTitleCache());
             xssfWorkbook.dispose();
-            dataToExcelService.writeTitle(excelService.getTitleCache(), path);
+            //此处还是会报异常  原因在于直接读取大文件导致内存溢出  后面在优化一下看看有没有好办法
+            //dataToExcelService.writeTitle(excelService.getTitleCache(), path);
         }
     }
 

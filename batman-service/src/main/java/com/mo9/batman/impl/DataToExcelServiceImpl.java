@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -19,7 +20,8 @@ import static java.util.stream.Collectors.groupingBy;
 
 /**
  * @Author:qmfang
- * @Description:
+ * @Description: 注意规整数据的接口已经独立出来到了接口FormatDataService中
+ * 但并没有至此处将其独立出来，因而存在大量的重复代码
  * @Date:Created in 18:15 2018/3/26
  * @Modified By:
  */
@@ -31,7 +33,7 @@ public class DataToExcelServiceImpl implements DataToExcelService {
 
     @Override
     public void writeFinancialIndex2Excel(Workbook xssfWorkbook, FinancialIndexBO financialIndexBO, String stockCode) {
-        if (Objects.nonNull(financialIndexBO) && !CollectionUtils.isEmpty(financialIndexBO.getReport())) {
+        if (Objects.nonNull(financialIndexBO) && !CollectionUtils.isEmpty(financialIndexBO.getYear())) {
             Map<String, List<Map<String, String>>> format = formatFinancialIndex(financialIndexBO, stockCode);
             writeRowTExcel(format, xssfWorkbook, "financial_");
         }
@@ -49,11 +51,13 @@ public class DataToExcelServiceImpl implements DataToExcelService {
     public void writeAsset2Excel(Workbook xssfWorkbook, List<MetaData> asset, String stockCode) {
         if (!CollectionUtils.isEmpty(asset)) {
             Map<String, List<Map<String, String>>> format = formatFinancialAsset(asset, stockCode);
-            writeRowTExcel(format, xssfWorkbook, "asset");
+            writeRowTExcel(format, xssfWorkbook, "asset_");
         }
     }
 
+
     @Override
+    @Deprecated
     public void writeTitle(Map<String, List<String>> titles, String path) {
         if (!CollectionUtils.isEmpty(titles)) {
             XSSFWorkbook xssfWorkbook = excelService.create(path);
@@ -70,17 +74,35 @@ public class DataToExcelServiceImpl implements DataToExcelService {
         }
     }
 
+    @Override
+    public void writeTitleTail(Workbook xssfWorkbook, Map<String, List<String>> titles) {
+        if (!CollectionUtils.isEmpty(titles)) {
+            for (Map.Entry<String, List<String>> entry : titles.entrySet()) {
+                Sheet sheet = xssfWorkbook.getSheet(entry.getKey());
+                if (!CollectionUtils.isEmpty(entry.getValue())) {
+                    List<String> titleNames = entry.getValue();
+                    int row = excelService.getRow(sheet);
+                    for (int column = 0; column < titleNames.size(); column++) {
+                        excelService.writeCell(titleNames.get(column), row, column, sheet);
+                    }
+                }
+            }
+        }
+    }
+
     private Map<String, List<Map<String, String>>> formatFinancialIndex(FinancialIndexBO financialIndexBO, String stockCode) {
         List<Map<String, String>> result = new ArrayList<>();
         if (Objects.nonNull(financialIndexBO) && !CollectionUtils.isEmpty(financialIndexBO.getTitle())) {
             List<String> titles = financialIndexBO.getTitle();
-            for (int row = 0; row < financialIndexBO.getReport().get(0).size(); row++) {
+            for (int row = 0; row < financialIndexBO.getYear().get(0).size(); row++) {
                 Map<String, String> rowData = new HashMap<>(titles.size());
                 for (int column = 0; column < titles.size(); column++) {
-                    rowData.put(titles.get(column), financialIndexBO.getReport().get(column).get(row));
+                    rowData.put(titles.get(column), financialIndexBO.getYear().get(column).get(row));
                 }
                 rowData.put("股票代码", stockCode);
-                result.add(rowData);
+                if (!StringUtils.isEmpty(rowData.get("科目\\时间"))) {
+                    result.add(rowData);
+                }
             }
         }
         try {
@@ -143,7 +165,6 @@ public class DataToExcelServiceImpl implements DataToExcelService {
                 }
             }
         }
-
     }
 
 }

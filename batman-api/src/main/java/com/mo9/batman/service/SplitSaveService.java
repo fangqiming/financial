@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * @Author:qmfang
- * @Description:
+ * @Description: 统一对外提供的接口，用于将股票计算好的财务信息写入到excel中
  * @Date:Created in 15:56 2018/3/27
  * @Modified By:
  */
