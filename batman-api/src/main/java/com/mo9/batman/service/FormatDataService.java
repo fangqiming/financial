@@ -1,6 +1,7 @@
 package com.mo9.batman.service;
 
 import com.mo9.batman.entity.FinancialIndexBO;
+import com.mo9.batman.entity.MetaData;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.*;
@@ -41,4 +42,12 @@ public interface FormatDataService {
     void writeTitleTail(Workbook xssfWorkbook, Map<String, List<String>> titles);
 
 
+    /**
+     * 用于将列形式的元素规整为一行的元素
+     *
+     * @param mateData
+     * @param sheetName
+     * @return
+     */
+    Map<String, List<Map<String, String>>> formatFinancialAsset(List<MetaData> mateData, String sheetName);
 }

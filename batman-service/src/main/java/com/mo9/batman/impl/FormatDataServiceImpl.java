@@ -1,6 +1,7 @@
 package com.mo9.batman.impl;
 
 import com.mo9.batman.entity.FinancialIndexBO;
+import com.mo9.batman.entity.MetaData;
 import com.mo9.batman.service.ExcelService;
 import com.mo9.batman.service.FormatDataService;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -83,5 +84,21 @@ public class FormatDataServiceImpl implements FormatDataService {
                 }
             }
         }
+    }
+
+
+    @Override
+    public Map<String, List<Map<String, String>>> formatFinancialAsset(List<MetaData> mateDataList, String sheetName) {
+        List<Map<String, String>> tmp = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(mateDataList)) {
+            Map<String, String> map = new HashMap<>(32);
+            for (MetaData metaData : mateDataList) {
+                map.put(metaData.getTitle(), metaData.getValue());
+            }
+            tmp.add(map);
+        }
+        Map<String, List<Map<String, String>>> result = new HashMap<>();
+        result.put(sheetName, tmp);
+        return result;
     }
 }

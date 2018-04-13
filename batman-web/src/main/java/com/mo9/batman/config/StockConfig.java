@@ -23,4 +23,12 @@ public class StockConfig {
 
     private Integer fileNum;
 
+    private List<String> titleName;
+
+    private List<String> commitName;
+
+    private List<String> isvarchar;
+
+    private String tableName;
+
 }
