@@ -1,6 +1,9 @@
 package com.mo9.batman.controller;
 
 import com.mo9.batman.config.StockConfig;
+import com.mo9.batman.dao.entity.vo.ContinuousVo;
+import com.mo9.batman.dao.entity.vo.SingleVo;
+import com.mo9.batman.dao.mapper.OriginalEachMapper;
 import com.mo9.batman.entity.MetaData;
 import com.mo9.batman.service.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -127,18 +131,35 @@ public class MainController {
         List<String> comment = stockConfig.getCommitName();
         List<String> title = stockConfig.getTitleName();
         List<String> isvarchar = stockConfig.getIsvarchar();
+        List<String> isDate = stockConfig.getIsData();
         String result = "";
         for (int i = 0; i < comment.size(); i++) {
             //  `key` varchar(200) NOT NULL COMMENT '用户code',
-            if (!isvarchar.contains(title.get(i))) {
-                result += "`" + title.get(i) + "` decimal(25,5) COMMENT '" + comment.get(i) + "',\r\n";
+            if (isDate.contains(title.get(i))) {
+                result += "`" + title.get(i) + "` datetime COMMENT '" + comment.get(i) + "',\r\n";
+            } else if (isvarchar.contains(title.get(i))) {
+                result += "`" + title.get(i) + "` varchar(50) COMMENT '" + comment.get(i) + "',\r\n";
             } else {
-                result += "`" + title.get(i) + "` varchar(30) COMMENT '" + comment.get(i) + "',\r\n";
+                result += "`" + title.get(i) + "` decimal(25,5) COMMENT '" + comment.get(i) + "',\r\n";
             }
         }
         result = start + result + end;
         System.out.println(result);
         return result;
+    }
+
+    @Resource
+    private OriginalEachMapper originalEachMapper;
+
+    @RequestMapping(value = "/test")
+    public Object Test() throws Exception {
+        ContinuousVo continuousVo = ContinuousVo.builder()
+                .tableName("summary_benefit")
+                .start("2014")
+                .end("2016")
+                .name("perNetAsset")
+                .value(new BigDecimal(10)).build().setGap();
+        return originalEachMapper.findContinuousIndex(continuousVo);
     }
 
 }

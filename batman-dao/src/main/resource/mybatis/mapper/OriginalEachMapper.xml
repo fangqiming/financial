@@ -1,0 +1,33 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mo9.batman.dao.mapper.OriginalEachMapper">
+
+    <select id="findSingleIndex" parameterType="com.mo9.batman.dao.entity.vo.SingleVo" resultType="java.lang.String">
+      select `code` from ${singleVo.tableName} where
+        <if test="singleVo.symbol == 'lt'">
+            ${singleVo.name} &lt;=  ${singleVo.value}
+        </if>
+        <if test="singleVo.symbol == 'gt'">
+            ${singleVo.name} &gt;=  ${singleVo.value}
+        </if>
+        and `time`=${singleVo.time}
+    </select>
+
+    <select id="findContinuousIndex" parameterType="com.mo9.batman.dao.entity.vo.ContinuousVo" resultType="java.lang.String">
+        select `code` from ${continuousVo.tableName} WHERE time
+          BETWEEN ${continuousVo.start} and ${continuousVo.end}
+            <if test="continuousVo.symbol == 'lt'">
+                and  ${continuousVo.name} &lt;= ${continuousVo.value}
+            </if>
+            <if test="continuousVo.symbol == 'gt'">
+                and  ${continuousVo.name} &gt;= ${continuousVo.value}
+            </if>
+
+          GROUP BY `code` HAVING count(code) = ${continuousVo.gap}
+</select>
+
+
+
+</mapper>

@@ -19,6 +19,7 @@
         <module>batman-core</module>
         <module>batman-service</module>
         <module>batman-web</module>
+        <module>batman-dao</module>
     </modules>
 
     <packaging>pom</packaging>

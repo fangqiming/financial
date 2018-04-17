@@ -29,6 +29,8 @@ public class StockConfig {
 
     private List<String> isvarchar;
 
+    private List<String> isData;
+
     private String tableName;
 
 }

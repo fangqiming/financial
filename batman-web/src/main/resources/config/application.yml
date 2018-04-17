@@ -1,6 +1,43 @@
 spring:
   application:
     name: batman
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/hello?serverTimezone=GMT
+    username: root
+    password: root
+    initial-size: 1
+    min-idle: 1
+    max-active: 20
+    max-wait: 60000
+    time-between-eviction-runs-millis: 60000
+    min-evictable-idle-time-millis: 300000
+    validation-query: SELECT 'x'
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    pool-prepared-statements: true
+    max-pool-prepared-statement-per-connection-size: 20
+    filters: stat
+dao:
+  mybatis:
+    plus:
+      config:
+        global:
+          id-type: 0
+          db-type: mysql
+          db-column-underline: true
+          logic-delete-value: 0
+          logic-not-delete-value: 0
+        sql:
+          session:
+            factory:
+              mapper-locations: classpath:mybatis/mapper/*.xml
+              configLocation: classpath:mybatis/mybatis-context.xml
+              type-aliases-package: com.mo9.batman.dao.model
+    config:
+      mapper:
+        scanner:
+          sql-session-factory-bean-name: sqlSessionFactory
 
   # 使Java8的Time API字段转换正常
   jackson:
@@ -8,12 +45,15 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
 
 server:
-  port: 8887
+  port: 8081
 
 logging:
   level:
     root: info
     com.mo9.batman: debug
+
+
+
 
 # 自定义设置
 system:
@@ -33,17 +73,16 @@ system:
   operate-url-suffix : _operate.json
   each-url-suffix : _each.json
 
-#  titleName: NetAssetsPerShare,liftBanNumber,PE_S,UDPPS,industry,ROE,inTotalEquityRate,circulateAStock,perManageCacheFLow,grossProfitRate,pb,code,perEarnings,totalMarketValue,liftBan,netProfit,liftBanStockType,pe_d,operatingIncome,totalEquity,perCapitalReserves
-#
-#  commitName : 每股净资产,解禁数量,市盈率静态,每股未分配利润,所属行业,净资产收益率,占总股本比例,流通A股,每股经营现金流,毛利率,市净率,股票代码,每股收益,总市值,最新解禁,净利润,解禁股份类型,市盈率(动态),营业收入,总股本,每股资本公积金
-#  isvarchar: industry,code,liftBan,liftBanStockType,operatingIncome
-#  tableName : majorIndex
+  titleName: currentRate,quickRate,propertyRightsRate,time,conservativeQuickRate,code
 
-  titleName: NetAssetsPerShare,liftBanNumber,PE_S,UDPPS,industry,ROE,inTotalEquityRate,circulateAStock,perManageCacheFLow,grossProfitRate,pb,code,perEarnings,totalMarketValue,liftBan,netProfit,liftBanStockType,pe_d,operatingIncome,totalEquity,perCapitalReserves
+  commitName: 流动比率_,速动比率_,产权比率_,科目\时间,保守速动比率_,股票代码
 
-  commitName : 每股净资产,解禁数量,市盈率静态,每股未分配利润,所属行业,净资产收益率,占总股本比例,流通A股,每股经营现金流,毛利率,市净率,股票代码,每股收益,总市值,最新解禁,净利润,解禁股份类型,市盈率(动态),营业收入,总股本,每股资本公积金
-  isvarchar: industry,code,liftBan,liftBanStockType,operatingIncome
-  tableName : majorIndex
+
+
+
+  isvarchar: code
+  isData: time
+  tableName : original_pay
 
 
 
